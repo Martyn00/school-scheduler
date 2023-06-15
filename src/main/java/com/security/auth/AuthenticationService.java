@@ -19,24 +19,25 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(ReqisterRequest request) {
+    public AuthenticationResponseDto register(ReqisterRequestDto request) {
         var user = User.builder()
                 .email(request.email)
                 .firstname(request.firstname)
                 .lastname(request.lastname)
                 .password(passwordEncoder.encode(request.getPassword()))
+                .schoolRole(request.schoolRole)
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDto.builder()
                 .token(jwtService.generateToken(user))
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("user not Found"));
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDto.builder()
                 .token(jwtService.generateToken(user))
                 .build();
     }

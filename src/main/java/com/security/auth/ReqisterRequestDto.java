@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class ReqisterRequest {
+public class ReqisterRequestDto {
     String  firstname;
     String  lastname;
+    String  schoolRole;
     String email;
     String password;
 }
